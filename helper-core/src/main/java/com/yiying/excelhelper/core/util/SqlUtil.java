@@ -1,11 +1,13 @@
 package com.yiying.excelhelper.core.util;
 
+import cn.hutool.core.util.ModifierUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.yiying.excelhelper.core.annoation.NotTableField;
 import com.yiying.excelhelper.core.annoation.TableName;
 
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -39,7 +41,8 @@ public class SqlUtil {
         Field[] fields = ReflectUtil.getFields(clazz);
         sqlBuf.append(" INSERT INTO ").append(tableName).append("( ");
         for (Field field : fields) {
-            if (Objects.isNull(field.getAnnotation(NotTableField.class))) {
+            if (Objects.isNull(field.getAnnotation(NotTableField.class))
+                    && !ModifierUtil.isStatic(field)) {
                 sqlBuf.append(column(field.getName())).append(",");
             }
         }
