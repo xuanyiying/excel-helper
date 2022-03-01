@@ -1,6 +1,5 @@
 package com.yiying.excelhelper.core.handler;
 
-import cn.hutool.core.collection.CollUtil;
 import com.yiying.excelhelper.core.model.Model;
 import com.yiying.excelhelper.core.read.ExcelReadContext;
 import com.yiying.excelhelper.core.task.SingleTableInsertTask;
@@ -9,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
