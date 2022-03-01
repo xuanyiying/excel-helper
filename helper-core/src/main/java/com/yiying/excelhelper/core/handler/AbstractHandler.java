@@ -20,32 +20,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 public abstract class AbstractHandler implements Handler {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHandler.class);
 
-    private static final int BATCH_INSERT_MAX_SIZE = 10000;
+    private static final int BATCH_INSERT_MAX_SIZE = 1000;
     public JdbcTemplate jdbcTemplate;
 
-    protected List slice(List<Model> data) {
-        List<List<Model>> subLists = new ArrayList<>();
-        if (CollUtil.isEmpty(data)) {
-            return new ArrayList();
-        }
-        int size = data.size();
-        int nThread = getThreadNum(size);
-        int end;
-        int start;
-        for (int i = 0; i < nThread; i++) {
-            start = i * nThread;
-            end = (i == nThread - 1) ? size : nThread * (i + 1);
-            subLists.add(CollUtil.sub(data, start, end));
-        }
-        return subLists;
-    }
 
     protected void submitTask(ExcelReadContext<Model> readContext) {
         List<Model> data = readContext.getData();
-        int threadNum = getThreadNum(data.size());
-        ThreadPoolExecutor poolExecutor = ThreadPools.newThreadPoolExecutor(threadNum);
+        int threadNum = ThreadPools.getMaxPoolSize(data.size(), BATCH_INSERT_MAX_SIZE);
+        ThreadPoolExecutor poolExecutor = ThreadPools.newThreadPoolExecutor(threadNum, "SingleTableInsertTask");
         CountDownLatch latch = new CountDownLatch(threadNum);
-        List<List<Model>> slices = slice(data);
+        List<List<Model>> slices = ThreadPools.slice(data, threadNum, BATCH_INSERT_MAX_SIZE);
         try {
             slices.forEach(slice -> {
                 poolExecutor.submit(new SingleTableInsertTask<>(slice, jdbcTemplate));
@@ -55,11 +39,5 @@ public abstract class AbstractHandler implements Handler {
         } catch (InterruptedException e) {
             LOGGER.error("{}", e);
         }
-    }
-
-    protected int getThreadNum(int size) {
-        int nThread = size / BATCH_INSERT_MAX_SIZE;
-        nThread = (size % BATCH_INSERT_MAX_SIZE == 0) ? nThread : nThread + 1;
-        return Math.min(nThread, ThreadPools.getMaxPoolSize());
     }
 }

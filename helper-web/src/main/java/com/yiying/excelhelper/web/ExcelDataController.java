@@ -22,7 +22,8 @@ import java.net.URLEncoder;
  */
 @RestController("/excel")
 public class ExcelDataController {
-    private final ExcelDataService dataService;
+    @Autowired
+    ExcelDataService dataService;
     @Autowired
     UserService userService;
 

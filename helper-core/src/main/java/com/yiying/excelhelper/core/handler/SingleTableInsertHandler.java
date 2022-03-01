@@ -43,7 +43,7 @@ public class SingleTableInsertHandler extends AbstractHandler {
      */
     @Override
     public void handle(Object data) {
-        ThreadPoolExecutor poolExecutor = ThreadPools.newThreadPoolExecutor();
+        ThreadPoolExecutor poolExecutor = ThreadPools.newThreadPoolExecutor("SingleTableInsertTask");
         LOGGER.info("start insert {} to database",data);
         poolExecutor.submit(new SingleTableInsertTask<>(Arrays.asList(data),jdbcTemplate));
     }

@@ -19,7 +19,7 @@ import java.time.LocalDate;
  * @Author: yiying.xuan
  */
 @Data
-@TableName("T_USER")
+@TableName("t_user")
 public class ExcelDataModel implements Model {
 
     @ExcelProperty(value = ExcelConstants.NAME, index = 0)

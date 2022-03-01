@@ -39,7 +39,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
         emfb.setDataSource(dataSource);
         emfb.setJpaVendorAdapter(jpaVendorAdapter);
-        emfb.setPackagesToScan("com.example.entity");
+        emfb.setPackagesToScan("com.yiying.excelhelper.entities");
         return emfb;
     }
 
