@@ -22,12 +22,12 @@ public class ThreadPools {
 
 
     public static ThreadPoolExecutor newThreadPoolExecutor(String name) {
-        return new ThreadPoolExecutor(1, getCorePoolSize(), 30, TimeUnit.SECONDS,
+        return new ThreadPoolExecutor(1, getCorePoolSize(), 3, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(), getThreadFactory(name));
     }
 
     public static ThreadPoolExecutor newThreadPoolExecutor(int nThread, String name) {
-        return new ThreadPoolExecutor(getCorePoolSize(), nThread, 30, TimeUnit.SECONDS,
+        return new ThreadPoolExecutor(getCorePoolSize(), nThread, 3, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(), getThreadFactory(name));
     }
 
@@ -36,7 +36,7 @@ public class ThreadPools {
     }
 
     public static ThreadPoolExecutor newThreadPoolExecutor(int coreSize, int maxSize, String name) {
-        return new ThreadPoolExecutor(coreSize, maxSize, 30, TimeUnit.SECONDS,
+        return new ThreadPoolExecutor(coreSize, maxSize, 3, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(), getThreadFactory(name));
     }
 
